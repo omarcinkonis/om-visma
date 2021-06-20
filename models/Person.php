@@ -1,10 +1,13 @@
 <?php
 include_once './config/Database.php';
+include_once 'models/Visit.php';
 
 class Person
 {
     // PDO instance
     private $conn;
+    
+    public $visit;
 
     public $id;
     public $name;
@@ -16,6 +19,9 @@ class Person
     {
         $database = new Database();
         $this->conn = $database->connect();
+
+        $visit = new Visit($this->conn);
+        $this->visit = $visit;
     }
 
     public function create($personDetails)
