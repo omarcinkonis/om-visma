@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 20, 2021 at 10:55 AM
+-- Generation Time: Jun 20, 2021 at 01:40 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -63,7 +63,7 @@ ALTER TABLE `person`
 --
 ALTER TABLE `visit`
   ADD PRIMARY KEY (`v_id`),
-  ADD KEY `p_id` (`p_id`);
+  ADD UNIQUE KEY `p_id` (`p_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
