@@ -22,18 +22,15 @@ class Display
 
         if ($command == 'register') {
             $this->register();
-        }
-
-        if ($command == 'appointment') {
+        } elseif ($command == 'appointment') {
             $this->appointment();
-        }
-
-        if ($command == 'all') {
+        } elseif ($command == 'all') {
             $this->all();
-        }
-
-        if ($command == 'quit') {
+        } elseif ($command == 'quit') {
             $this->quit();
+        } else {
+            echo "Command unrecognized, please try again.\n\n";
+            $this->menu();
         }
     }
 
@@ -78,7 +75,7 @@ class Display
     private function all()
     {
         $result = $this->person->read();
-        while ($row = $result->fetch()){
+        while ($row = $result->fetch()) {
             echo $row['p_name'] . ' ' . $row['p_email'] . ' ' . $row['p_phone'] . ' ' . $row['p_code'] . "\n";
         }
         echo "\n";
