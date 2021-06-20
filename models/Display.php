@@ -39,6 +39,12 @@ class Display
         echo "Enter registrant's national identification number:\n";
         $code = chop(fgets(STDIN));
 
+        if ($this->person->readSingle($code)) {
+            if ($this->person->visit->readSingle($code)) {
+                $this->appointment($code);
+            }
+        }
+
         echo "Enter registrant's name:\n";
         $name = chop(fgets(STDIN));
 
@@ -59,15 +65,40 @@ class Display
         $this->menu();
     }
 
-    private function appointment()
+    private function appointment($code = null)
     {
-        echo "Enter registrant's national identification number:\n";
-        $code = chop(fgets(STDIN));
-        $this->person->readSingle($code);
-        echo "Registrant ID:            " . $this->person->id;
-        echo "\nRegistrant name:          " . $this->person->name;
-        echo "\nContact email:            " . $this->person->email;
-        echo "\nContact phone number:     " . $this->person->phone . "\n\n";
+        if ($code === null) {
+            echo "Enter registrant's national identification number:\n";
+            $code = chop(fgets(STDIN));
+        }
+
+        if ($this->person->readSingle($code)) {
+            echo "\nFound appointment:\n";
+            echo "  Registrant ID:          " . $this->person->id;
+            echo "\n  Registrant name:        " . $this->person->name;
+            echo "\n  Contact email:          " . $this->person->email;
+            echo "\n  Contact phone number:   " . $this->person->phone . "\n\n";
+
+            echo "What would you like to do?\n";
+            echo "  remove                  remove appointment\n";
+            echo "  time                    change time\n";
+            echo "  nothing                 do nothing\n";
+
+            $command = chop(fgets(STDIN));
+
+            if ($command == 'remove') {
+                //
+            } elseif ($command == 'time') {
+                //
+            } elseif ($command == 'nothing') {
+                //
+            } else {
+                echo "Command unrecognized, returning to menu.\n\n";
+                $this->menu();
+            }
+        } else {
+            echo "Could not find an appointment for the specified person.\n\n";
+        }
 
         $this->menu();
     }

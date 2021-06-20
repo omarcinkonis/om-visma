@@ -55,7 +55,7 @@ class Person
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo 'ERROR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage() . "\n";
             return false;
         }
 
@@ -76,7 +76,7 @@ class Person
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo 'ERROR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage() . "\n";
             return false;
         }
 
@@ -99,7 +99,7 @@ class Person
         try {
             $stmt->execute([$code]);
         } catch (PDOException $e) {
-            echo 'ERROR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage() . "\n";
             return false;
         }
 
@@ -107,7 +107,7 @@ class Person
         $num = $stmt->rowCount();
         if ($num < 1)
         {
-            printf('ERROR: person not found.');
+            printf("Person not found.\n");
             return false;
         }
 

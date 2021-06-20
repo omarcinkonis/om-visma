@@ -37,7 +37,7 @@ class Visit
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo 'ERROR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage() . "\n";
             return false;
         }
 
@@ -59,7 +59,7 @@ class Visit
         try {
             $stmt->execute();
         } catch (PDOException $e) {
-            echo 'ERROR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage() . "\n";
             return false;
         }
 
@@ -67,28 +67,28 @@ class Visit
     }
 
     // Read one visit
-    public function readSingle()
+    public function readSingle($code)
     {
         $query = '
             SELECT p_name, p_email, p_phone, p_code, v_id, v_time
             FROM visit
             NATURAL JOIN person
-            WHERE p_id = ?
+            WHERE p_code = ?
         ';
 
         $stmt = $this->conn->prepare($query);
 
         try {
-            $stmt->execute([$this->personId]);
+            $stmt->execute([$code]);
         } catch (PDOException $e) {
-            echo 'ERROR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage() . "\n";
             return false;
         }
 
         // Ensure visit exists
         $num = $stmt->rowCount();
         if ($num < 1) {
-            printf('ERROR: appointment not found.');
+            printf("Appointment not found.\n");
             return false;
         }
 
