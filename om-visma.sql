@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 20, 2021 at 10:20 AM
+-- Generation Time: Jun 20, 2021 at 10:55 AM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.0
 
@@ -55,7 +55,8 @@ CREATE TABLE `visit` (
 -- Indexes for table `person`
 --
 ALTER TABLE `person`
-  ADD PRIMARY KEY (`p_id`);
+  ADD PRIMARY KEY (`p_id`),
+  ADD UNIQUE KEY `p_code` (`p_code`);
 
 --
 -- Indexes for table `visit`
