@@ -1,22 +1,35 @@
 <?php
+include_once 'Person.php';
+
 class Display
 {
-    private $name;
+    private $person;
 
     public function __construct()
     {
+        $this->person = new Person();
         $this->menu();
     }
 
     private function menu()
     {
         echo "Enter a command:\n";
-        echo "  register          register for an appointment\n";
-        echo "  quit              quit application\n\n";
+        echo "  register                register for an appointment\n";
+        echo "  appointment             show and manage a scheduled appointment\n";
+        echo "  all                     show all registrants\n";
+        echo "  quit                    quit application\n\n";
         $command = chop(fgets(STDIN));
 
         if ($command == 'register') {
             $this->register();
+        }
+
+        if ($command == 'appointment') {
+            $this->appointment();
+        }
+
+        if ($command == 'all') {
+            $this->all();
         }
 
         if ($command == 'quit') {
@@ -26,9 +39,49 @@ class Display
 
     private function register()
     {
-        echo "Enter your name\n";
-        $this->name = chop(fgets(STDIN));
-        echo $this->name . " registered!\n\n";
+        echo "Enter registrant's national identification number:\n";
+        $code = chop(fgets(STDIN));
+
+        echo "Enter registrant's name:\n";
+        $name = chop(fgets(STDIN));
+
+        echo "Enter a contact email:\n";
+        $email = chop(fgets(STDIN));
+
+        echo "Enter a contact phone number:\n";
+        $phone = chop(fgets(STDIN));
+
+        $personDetails = [$name, $email, $phone, $code];
+
+        if ($this->person->create($personDetails)) {
+            echo $name . " registered!\n\n";
+        } else {
+            echo "Registration failed.\n\n";
+        }
+
+        $this->menu();
+    }
+
+    private function appointment()
+    {
+        echo "Enter registrant's national identification number:\n";
+        $code = chop(fgets(STDIN));
+        $this->person->readSingle($code);
+        echo "Registrant ID:            " . $this->person->id;
+        echo "\nRegistrant name:          " . $this->person->name;
+        echo "\nContact email:            " . $this->person->email;
+        echo "\nContact phone number:     " . $this->person->phone . "\n\n";
+
+        $this->menu();
+    }
+
+    private function all()
+    {
+        $result = $this->person->read();
+        while ($row = $result->fetch()){
+            echo $row['p_name'] . ' ' . $row['p_email'] . ' ' . $row['p_phone'] . ' ' . $row['p_code'] . "\n";
+        }
+        echo "\n";
 
         $this->menu();
     }

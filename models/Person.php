@@ -1,4 +1,6 @@
 <?php
+include_once './config/Database.php';
+
 class Person
 {
     // PDO instance
@@ -10,9 +12,10 @@ class Person
     public $phone;
     public $code;
 
-    public function __construct($db)
+    public function __construct()
     {
-        $this->conn = $db;
+        $database = new Database();
+        $this->conn = $database->connect();
     }
 
     public function create($personDetails)
@@ -43,54 +46,54 @@ class Person
         $stmt->bindParam(':code', $this->code);
 
         // Execute query
-        if ($stmt->execute()) {
-            return true;
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage();
+            return false;
         }
 
-        // Print error if failed to execute
-        printf('ERROR: ', $stmt->error);
-
-        return false;
+        return true;        
     }
 
+    // Read all registrants
     public function read()
     {
         $query = '
             SELECT p_id, p_name, p_email, p_phone, p_code
-            FROM project
+            FROM person
             ORDER BY p_id
         ';
 
         $stmt = $this->conn->prepare($query);
 
-        // Execute query
-        if (!$stmt->execute()) {
-            printf('ERROR: ', $stmt->error);
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage();
             return false;
         }
 
         return $stmt;
     }
 
-    // Get one project
+    // Read one project
     public function readSingle($code)
     {
-        // Create query
         $query = '
             SELECT p_id, p_name, p_email, p_phone, p_code
-            FROM project
+            FROM person
             WHERE p_code = ?
         ';
 
-        // Prepare statement
         $stmt = $this->conn->prepare($query);
 
-        // Clean data
         $code = htmlspecialchars(strip_tags($code));
 
-        // Bind code and execute query
-        if (!$stmt->execute([$code])) {
-            printf('ERROR: ', $stmt->error);
+        try {
+            $stmt->execute([$code]);
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage();
             return false;
         }
 
