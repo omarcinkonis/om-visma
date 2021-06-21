@@ -16,7 +16,7 @@ class Display
         echo "Enter a command:\n";
         echo "  register                register for an appointment\n";
         echo "  appointment             show and manage a scheduled appointment\n";
-        echo "  all                     show all registrants\n";
+        echo "  all                     show all appointments\n";
         echo "  quit                    quit application\n\n";
         $command = chop(fgets(STDIN));
 
@@ -83,8 +83,7 @@ class Display
         $datetime = $date . ' 12:00:00';
         $visitDetails = [$this->person->id, $datetime];
 
-        if ($update === true)
-        {
+        if ($update === true) {
             if ($this->person->visit->update($visitDetails)) {
                 echo $this->person->name . ' registered for vaccination on ' . $datetime . "\n";
                 return true;
@@ -117,26 +116,22 @@ class Display
                 continue;
             }
 
-            if($this->person->visit->timeIsFree($date))
-            {
+            if ($this->person->visit->timeIsFree($date)) {
                 array_push($availableDates, $date);
                 echo "  " . sizeof($availableDates) . "                       " . $date . "\n";
-
             }
-            
+
             $date = $this->addDay($date);
         }
 
-        if(sizeof($availableDates) < 1)
-        {
+        if (sizeof($availableDates) < 1) {
             echo "No registration dates left for today.\n";
             echo "Please check again tomorrow.\n";
         }
 
-        $userPick = chop(fgets(STDIN))-1;
+        $userPick = chop(fgets(STDIN)) - 1;
 
-        while($userPick > sizeof($availableDates) - 1)
-        {
+        while ($userPick > sizeof($availableDates) - 1) {
             echo "Choice not valid, please enter one of the given options.\n";
             $userPick = chop(fgets(STDIN)) - 1;
         }
@@ -208,7 +203,34 @@ class Display
         }
         echo "\n";
 
+        echo "Would you like to output these results to a CSV file?\n";
+        echo "  yes\n";
+        echo "  no\n";
+        $command = chop(fgets(STDIN));
+
+        if ($command == 'yes') {
+            $this->outputCsv();
+        } elseif ($command == 'no') {
+            //
+        } else {
+            echo "Command unrecognized, returning to menu.\n";
+            $this->menu();
+        }
+
         $this->menu();
+    }
+
+    private function outputCsv()
+    {
+        $file = fopen('output.csv', 'w');
+        fputcsv($file, array('Name', 'Email', 'Phone', 'National ID', 'Visit date and time'));
+
+        $result = $this->person->visit->read();
+        while ($row = $result->fetch()) {
+            fputcsv($file, array($row['p_name'], $row['p_email'], $row['p_phone'], $row['p_code'], $row['v_time']));
+        }
+        
+        echo "Output successful.\n\n";
     }
 
     private function quit()
