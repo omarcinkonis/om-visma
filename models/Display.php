@@ -116,16 +116,28 @@ class Display
                 $i--;
                 continue;
             }
-            echo "  " . ($i+1) . "                       " . $date . "\n";
-            array_push($availableDates, $date);
+
+            if($this->person->visit->timeIsFree($date))
+            {
+                array_push($availableDates, $date);
+                echo "  " . sizeof($availableDates) . "                       " . $date . "\n";
+
+            }
+            
             $date = $this->addDay($date);
+        }
+
+        if(sizeof($availableDates) < 1)
+        {
+            echo "No registration dates left for today.\n";
+            echo "Please check again tomorrow.\n";
         }
 
         $userPick = chop(fgets(STDIN))-1;
 
-        while($userPick > 4)
+        while($userPick > sizeof($availableDates) - 1)
         {
-            echo "Choice not valid, please enter one of the given options.";
+            echo "Choice not valid, please enter one of the given options.\n";
             $userPick = chop(fgets(STDIN)) - 1;
         }
 

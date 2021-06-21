@@ -102,6 +102,32 @@ class Visit
         return true;
     }
 
+    public function timeIsFree($time)
+    {
+        $query = '
+            SELECT v_id
+            FROM visit
+            WHERE v_time LIKE ?
+        ';
+
+        $stmt = $this->conn->prepare($query);
+
+        try {
+            $stmt->execute([$time.'%']);
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage() . "\n";
+            return false;
+        }
+
+        // Ensure visit does not exist
+        $num = $stmt->rowCount();
+        if ($num < 1) {
+            return true;
+        }
+
+        return false;
+    }
+
     // Update time
     public function update($visitDetails)
     {
