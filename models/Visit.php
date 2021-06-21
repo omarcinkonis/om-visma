@@ -23,7 +23,7 @@ class Visit
         INSERT INTO visit
         SET
             p_id = :personId,
-            v_time = :time,
+            v_time = :time
         ';
 
         $stmt = $this->conn->prepare($query);
