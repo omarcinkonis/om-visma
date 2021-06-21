@@ -64,6 +64,7 @@ class Display
         if ($this->person->visit->readSingle($code)) {
             $this->appointment($code);
         } else {
+            $this->person->readSingle($code);
             $this->assignDate();
         }
 
