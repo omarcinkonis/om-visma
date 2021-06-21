@@ -57,10 +57,21 @@ class Display
         $personDetails = [$name, $email, $phone, $code];
 
         if ($this->person->create($personDetails)) {
-            echo $name . " registered!\n\n";
+            echo $name . " registered.\n\n";
         } else {
             echo "Registration failed.\n\n";
         }
+
+        echo "Choose appointment date:\n";
+        // pickDate();
+        $date = chop(fgets(STDIN));
+
+        echo "Choose appointment time:\n";
+        // pickTime();
+        $time = chop(fgets(STDIN));
+
+        // $datetime = $date . ' ' . $time;
+        // $visitDetails = [$datetime]
 
         $this->menu();
     }
