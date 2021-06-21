@@ -64,24 +64,42 @@ class Display
         if ($this->person->visit->readSingle($code)) {
             $this->appointment($code);
         } else {
-            echo "Choose appointment date:\n";
-            $date = $this->pickDate();
-
-            // For the sake of simplicity, all appointments are set to 12:00:00
-            // echo "Choose appointment time:\n";
-            // pickTime();
-
-            $datetime = $date . ' 12:00:00';
-            $visitDetails = [$this->person->id, $datetime];
-            
-            if ($this->person->visit->create($visitDetails)) {
-                echo $this->person->name . ' registered for vaccination on ' . $datetime . "\n\n";
-            } else {
-                echo "Registration failed. Returning to menu.\n\n";
-            }
+            $this->assignDate();
         }
 
         $this->menu();
+    }
+
+    private function assignDate($update = false)
+    {
+        echo "Choose appointment date:\n";
+        $date = $this->pickDate();
+
+        // For the sake of simplicity, all appointments are set to 12:00:00
+        // echo "Choose appointment time:\n";
+        // pickTime();
+
+        $datetime = $date . ' 12:00:00';
+        $visitDetails = [$this->person->id, $datetime];
+
+        if ($update === true)
+        {
+            if ($this->person->visit->update($visitDetails)) {
+                echo $this->person->name . ' registered for vaccination on ' . $datetime . "\n";
+                return true;
+            } else {
+                echo "Failed to update time. Returning to menu.\n\n";
+                return false;
+            }
+        }
+
+        if ($this->person->visit->create($visitDetails)) {
+            echo $this->person->name . ' registered for vaccination on ' . $datetime . "\n\n";
+            return true;
+        } else {
+            echo "Registration failed. Returning to menu.\n\n";
+            return false;
+        }
     }
 
     private function pickDate()
@@ -152,15 +170,15 @@ class Display
             if ($command == 'remove') {
                 //
             } elseif ($command == 'time') {
-                //
+                $this->assignDate(true);
             } elseif ($command == 'nothing') {
                 //
             } else {
-                echo "Command unrecognized, returning to menu.\n\n";
+                echo "Command unrecognized, returning to menu.\n";
                 $this->menu();
             }
         } else {
-            echo "Could not find an appointment for the specified person.\n\n";
+            echo "Please register to manage your appointment.\n";
         }
 
         echo "\n";
