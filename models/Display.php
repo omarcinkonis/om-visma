@@ -170,6 +170,7 @@ class Display
     private function all()
     {
         $result = $this->person->visit->read();
+        echo "(name, email, phone, national ID, visit date, visit time)\n";
         while ($row = $result->fetch()) {
             echo $row['p_name'] . ' ' . $row['p_email'] . ' ' . $row['p_phone'] . ' ' . $row['p_code'] . ' ' . $row['v_time'] . "\n";
         }
