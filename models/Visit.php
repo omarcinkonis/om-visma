@@ -89,7 +89,7 @@ class Visit
         // Ensure visit exists
         $num = $stmt->rowCount();
         if ($num < 1) {
-            printf("Appointment not found.\n");
+            printf("Existing appointment not found.\n");
             return false;
         }
 
@@ -118,6 +118,28 @@ class Visit
 
         $stmt->bindParam(':personId', $this->personId);
         $stmt->bindParam(':time', $this->time);
+
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage() . "\n";
+            return false;
+        }
+
+        return true;
+    }
+
+    // Delete appointment
+    public function delete()
+    {
+        $query = '
+            DELETE FROM visit
+            WHERE v_id = :id
+        ';
+
+        $stmt = $this->conn->prepare($query);
+
+        $stmt->bindParam(':id', $this->id);
 
         try {
             $stmt->execute();

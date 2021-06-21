@@ -40,7 +40,7 @@ class Display
         $code = chop(fgets(STDIN));
 
         if ($this->person->readSingle($code)) {
-            echo "User found. Hello " . $this->person->name . "\n";
+            echo "User found. Hello, " . $this->person->name . ".\n";
         } else {
             echo "Enter registrant's name:\n";
             $name = chop(fgets(STDIN));
@@ -168,7 +168,8 @@ class Display
             $command = chop(fgets(STDIN));
 
             if ($command == 'remove') {
-                //
+                $this->person->visit->delete();
+                echo "Registration removed.\n";
             } elseif ($command == 'time') {
                 $this->assignDate(true);
             } elseif ($command == 'nothing') {

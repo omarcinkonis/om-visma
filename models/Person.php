@@ -107,7 +107,7 @@ class Person
         $num = $stmt->rowCount();
         if ($num < 1)
         {
-            printf("Person not found.\n");
+            printf("Registered person not found.\n");
             return false;
         }
 
