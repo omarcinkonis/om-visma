@@ -101,4 +101,31 @@ class Visit
 
         return true;
     }
+
+    // Update time
+    public function update($visitDetails)
+    {
+        $query = '
+            UPDATE visit
+            SET v_time = :time
+            WHERE p_id = :personId
+        ';
+
+        $stmt = $this->conn->prepare($query);
+
+        $this->personId = htmlspecialchars(strip_tags($visitDetails[0]));
+        $this->time = htmlspecialchars(strip_tags($visitDetails[1]));
+
+        $stmt->bindParam(':personId', $this->personId);
+        $stmt->bindParam(':time', $this->time);
+
+        try {
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo 'ERROR: ' . $e->getMessage() . "\n";
+            return false;
+        }
+
+        return true;
+    }
 }
