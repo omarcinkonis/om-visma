@@ -74,6 +74,7 @@ class Visit
             FROM visit
             NATURAL JOIN person
             WHERE p_code = ?
+            ORDER BY v_time DESC
         ';
 
         $stmt = $this->conn->prepare($query);

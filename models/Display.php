@@ -132,12 +132,15 @@ class Display
             $code = chop(fgets(STDIN));
         }
 
-        if ($this->person->readSingle($code)) {
-            echo "\nAppointment found:\n";
-            echo "  Registrant ID:          " . $this->person->id;
+        if ($this->person->visit->readSingle($code)) {
+            $this->person->readSingle($code);
+            echo "\nAppointment found:";
+            echo "\n  Registrant ID:          " . $this->person->id;
             echo "\n  Registrant name:        " . $this->person->name;
             echo "\n  Contact email:          " . $this->person->email;
-            echo "\n  Contact phone number:   " . $this->person->phone . "\n\n";
+            echo "\n  Contact phone number:   " . $this->person->phone;
+            echo "\n  Appointment time:       " . $this->person->visit->time;
+            echo "\n\n";
 
             echo "What would you like to do?\n";
             echo "  remove                  remove appointment\n";
